@@ -34,14 +34,12 @@
             ctxMenuForNotifyIcon = new ContextMenuStrip(components);
             snoozeAllFor3HoursToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
-            lbDrinkWater = new Label();
-            lbDoExercise = new Label();
-            lbDWTime = new Label();
-            lbDETime = new Label();
-            btnSnoozeDW = new Button();
-            btnSnoozeDE = new Button();
             btnReloadCf = new Button();
             btnSaveCf = new Button();
+            listView1 = new ListView();
+            columnHeader1 = new ColumnHeader();
+            columnHeader2 = new ColumnHeader();
+            columnHeader3 = new ColumnHeader();
             ctxMenuForNotifyIcon.SuspendLayout();
             SuspendLayout();
             // 
@@ -73,93 +71,64 @@
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
-            // lbDrinkWater
-            // 
-            lbDrinkWater.AutoSize = true;
-            lbDrinkWater.Location = new Point(39, 42);
-            lbDrinkWater.Name = "lbDrinkWater";
-            lbDrinkWater.Size = new Size(67, 15);
-            lbDrinkWater.TabIndex = 1;
-            lbDrinkWater.Text = "Drink water";
-            // 
-            // lbDoExercise
-            // 
-            lbDoExercise.AutoSize = true;
-            lbDoExercise.Location = new Point(39, 91);
-            lbDoExercise.Name = "lbDoExercise";
-            lbDoExercise.Size = new Size(67, 15);
-            lbDoExercise.TabIndex = 2;
-            lbDoExercise.Text = "Do exercise";
-            // 
-            // lbDWTime
-            // 
-            lbDWTime.AutoSize = true;
-            lbDWTime.Location = new Point(250, 42);
-            lbDWTime.Name = "lbDWTime";
-            lbDWTime.Size = new Size(34, 15);
-            lbDWTime.TabIndex = 3;
-            lbDWTime.Text = "10:30";
-            // 
-            // lbDETime
-            // 
-            lbDETime.AutoSize = true;
-            lbDETime.Location = new Point(250, 91);
-            lbDETime.Name = "lbDETime";
-            lbDETime.Size = new Size(28, 15);
-            lbDETime.TabIndex = 4;
-            lbDETime.Text = "9:30";
-            // 
-            // btnSnoozeDW
-            // 
-            btnSnoozeDW.Location = new Point(401, 42);
-            btnSnoozeDW.Name = "btnSnoozeDW";
-            btnSnoozeDW.Size = new Size(75, 23);
-            btnSnoozeDW.TabIndex = 5;
-            btnSnoozeDW.Text = "Snooze 3h";
-            btnSnoozeDW.UseVisualStyleBackColor = true;
-            btnSnoozeDW.Click += btnSnoozeDW_Click;
-            // 
-            // btnSnoozeDE
-            // 
-            btnSnoozeDE.Location = new Point(401, 91);
-            btnSnoozeDE.Name = "btnSnoozeDE";
-            btnSnoozeDE.Size = new Size(75, 23);
-            btnSnoozeDE.TabIndex = 6;
-            btnSnoozeDE.Text = "Snooze 3h";
-            btnSnoozeDE.UseVisualStyleBackColor = true;
-            btnSnoozeDE.Click += btnSnoozeDE_Click;
-            // 
             // btnReloadCf
             // 
-            btnReloadCf.Location = new Point(88, 211);
+            btnReloadCf.Location = new Point(124, 258);
             btnReloadCf.Name = "btnReloadCf";
             btnReloadCf.Size = new Size(119, 23);
             btnReloadCf.TabIndex = 7;
             btnReloadCf.Text = "Reload config file";
             btnReloadCf.UseVisualStyleBackColor = true;
+            btnReloadCf.Click += btnReloadCf_Click;
             // 
             // btnSaveCf
             // 
-            btnSaveCf.Location = new Point(318, 211);
+            btnSaveCf.Location = new Point(331, 258);
             btnSaveCf.Name = "btnSaveCf";
             btnSaveCf.Size = new Size(119, 23);
             btnSaveCf.TabIndex = 8;
             btnSaveCf.Text = "Save config file";
             btnSaveCf.UseVisualStyleBackColor = true;
+            btnSaveCf.Click += btnSaveCf_Click;
+            // 
+            // listView1
+            // 
+            listView1.BackColor = SystemColors.InactiveBorder;
+            listView1.BorderStyle = BorderStyle.None;
+            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
+            listView1.Location = new Point(48, 12);
+            listView1.Name = "listView1";
+            listView1.Size = new Size(472, 227);
+            listView1.TabIndex = 9;
+            listView1.UseCompatibleStateImageBehavior = false;
+            listView1.View = View.Details;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Tag = "";
+            columnHeader1.Text = "Task";
+            columnHeader1.Width = 250;
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "Remind time";
+            columnHeader2.TextAlign = HorizontalAlignment.Center;
+            columnHeader2.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "";
+            columnHeader3.TextAlign = HorizontalAlignment.Center;
+            columnHeader3.Width = 120;
             // 
             // RoutineAlarm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 311);
+            Controls.Add(listView1);
             Controls.Add(btnSaveCf);
             Controls.Add(btnReloadCf);
-            Controls.Add(btnSnoozeDE);
-            Controls.Add(btnSnoozeDW);
-            Controls.Add(lbDETime);
-            Controls.Add(lbDWTime);
-            Controls.Add(lbDoExercise);
-            Controls.Add(lbDrinkWater);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -170,7 +139,6 @@
             Resize += Form1_Resize;
             ctxMenuForNotifyIcon.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -179,13 +147,11 @@
         private ContextMenuStrip ctxMenuForNotifyIcon;
         private ToolStripMenuItem snoozeAllFor3HoursToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
-        private Label lbDrinkWater;
-        private Label lbDoExercise;
-        private Label lbDWTime;
-        private Label lbDETime;
-        private Button btnSnoozeDW;
-        private Button btnSnoozeDE;
         private Button btnReloadCf;
         private Button btnSaveCf;
+        private ListView listView1;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
     }
 }
