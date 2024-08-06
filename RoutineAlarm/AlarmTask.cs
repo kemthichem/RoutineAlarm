@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RoutineAlarm
 {
-    internal class AlarmTask
+    class AlarmTask
     {
         public AlarmTask(string des, string alarmTimStr, bool isPlayed) {
             this.description = des;
@@ -25,7 +25,7 @@ namespace RoutineAlarm
 
     }
 
-    internal enum AlarmStatus
+    enum AlarmStatus
     { 
         NotPlayed,
         Playing,

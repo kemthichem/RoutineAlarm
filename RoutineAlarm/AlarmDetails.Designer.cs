@@ -50,6 +50,7 @@
             btnOK.TabIndex = 1;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
             // 
             // btnSnooze
             // 
@@ -59,20 +60,23 @@
             btnSnooze.TabIndex = 2;
             btnSnooze.Text = "Snooze 3 hours";
             btnSnooze.UseVisualStyleBackColor = true;
+            btnSnooze.Click += btnSnooze_Click;
             // 
             // AlarmDetails
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(384, 211);
+            ControlBox = false;
             Controls.Add(btnSnooze);
             Controls.Add(btnOK);
             Controls.Add(richTextBox1);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AlarmDetails";
             StartPosition = FormStartPosition.CenterParent;
             Text = "AlarmDetail";
+            Load += AlarmDetails_Load;
             ResumeLayout(false);
         }
 

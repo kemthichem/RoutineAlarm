@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoutineAlarm", "RoutineAlarm\RoutineAlarm.csproj", "{30C34151-3569-4EED-9E46-86D2D335EE83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{64DBCF75-6A48-4C69-A2C1-88284E808EF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{30C34151-3569-4EED-9E46-86D2D335EE83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{30C34151-3569-4EED-9E46-86D2D335EE83}.Release|x86.ActiveCfg = Release|x86
 		{30C34151-3569-4EED-9E46-86D2D335EE83}.Release|x86.Build.0 = Release|x86
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Debug|x86.Build.0 = Debug|Any CPU
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Release|x86.ActiveCfg = Release|Any CPU
+		{64DBCF75-6A48-4C69-A2C1-88284E808EF3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

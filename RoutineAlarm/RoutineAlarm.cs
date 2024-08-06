@@ -10,6 +10,10 @@ namespace RoutineAlarm
 
         private AlarmingConfiguration alarmingConfiguration;
         private List<AlarmTask> alarmTasks;
+        private Thread myThread;
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token;
+        int currentActiveAlarmTaskIdx = -1;
 
         public RoutineAlarm()
         {
@@ -17,6 +21,34 @@ namespace RoutineAlarm
 
             alarmingConfiguration = new AlarmingConfiguration(Application.StartupPath + "\\alarm_tasks.txt");
             alarmTasks = alarmingConfiguration.LoadCurrentConfig();
+
+
+            
+            token = source.Token;
+
+            myThread = new Thread(this.checkAlarmTime);
+
+        }
+
+
+        public void SnoozeAnAlarmTask()
+        {
+            if (currentActiveAlarmTaskIdx != -1)
+            {
+                updateAnAlarmTaskTime(currentActiveAlarmTaskIdx);
+
+                listView1.Items[currentActiveAlarmTaskIdx].SubItems[2].Text = alarmTasks[currentActiveAlarmTaskIdx].alarmStatus.ToString();
+
+            }
+        }
+
+        public void OKAnAlarmTask()
+        {
+            if (currentActiveAlarmTaskIdx != -1)
+            {
+                alarmTasks[currentActiveAlarmTaskIdx].alarmStatus = AlarmStatus.Played;
+                listView1.Items[currentActiveAlarmTaskIdx].SubItems[2].Text = alarmTasks[currentActiveAlarmTaskIdx].alarmStatus.ToString(); 
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -25,8 +57,8 @@ namespace RoutineAlarm
 
             loadAlarmListView();
 
-            Thread myThread = new Thread(new ThreadStart(checkAlarmTime));
-            myThread.Start();
+            
+            myThread.Start(token);
         }
 
         private void loadAlarmListView()
@@ -36,7 +68,7 @@ namespace RoutineAlarm
             listView1.FullRowSelect = true;
             ListViewExtender extender = new ListViewExtender(listView1);
             // extend 2nd column
-            ListViewButtonColumn lBtnSnooze = new ListViewButtonColumn(2);
+            ListViewButtonColumn lBtnSnooze = new ListViewButtonColumn(3);
             lBtnSnooze.Click += OnListBtnSnoozeClick;
             lBtnSnooze.FixedWidth = true;
 
@@ -47,30 +79,44 @@ namespace RoutineAlarm
             {
                 ListViewItem item = listView1.Items.Add(alarmTask.description);
                 item.SubItems.Add(alarmTask.alarmTime.ToShortTimeString());
+                item.SubItems.Add(alarmTask.alarmStatus.ToString());
                 item.SubItems.Add("Snooze for 3h");
             }
         }
 
-        private void checkAlarmTime()
+        private void checkAlarmTime(object token)
         {
-            while (true)
+            while (!((CancellationToken)token).IsCancellationRequested)
             {
                 Thread.Sleep(5000);
-
-
-
-                DateTime dt = alarmTasks[0].alarmTime;
-
-                if (DateTime.Now.TimeOfDay > dt.TimeOfDay)
+                int i = 0;
+                foreach (AlarmTask alarmTask in alarmTasks)
                 {
-
-                    AlarmDetails alarmDetails = new AlarmDetails();
-                    Program.globalForm.Invoke((MethodInvoker)delegate ()
+                    
+                    if (alarmTask.alarmStatus == AlarmStatus.NotPlayed)
                     {
-                        alarmDetails.Show();
-                    });
+                        DateTime dt = alarmTask.alarmTime;
 
+                        if (DateTime.Now.TimeOfDay > dt.TimeOfDay)
+                        {
+                            currentActiveAlarmTaskIdx = i;
+                            AlarmDetails alarmDetails = new AlarmDetails(Program.globalForm);
+                            alarmDetails.Text = alarmTask.description;
+                            Program.globalForm.Invoke((MethodInvoker)delegate ()
+                            {
+                                //alarmDetails.Show(Program.globalForm);
+                                alarmDetails.ShowDialog();
+                            });
+                            alarmTask.alarmStatus = AlarmStatus.Playing;
+
+                            //reset
+                            currentActiveAlarmTaskIdx = -1;
+                        }
+
+                    }
+                    ++i;
                 }
+
             }
         }
 
@@ -137,7 +183,12 @@ namespace RoutineAlarm
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            source.Cancel();
             this.Dispose();
+            ////Application.Exit();
+            ///
+            
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -147,23 +198,6 @@ namespace RoutineAlarm
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
             }
-        }
-
-        private void btnSnoozeDW_Click(object sender, EventArgs e)
-        {
-            AlarmDetails alarmDetails = new AlarmDetails();
-            alarmDetails.Show();
-        }
-
-        private void btnSnoozeDE_Click(object sender, EventArgs e)
-        {
-            playSimpleSound();
-        }
-
-        private void playSimpleSound()
-        {
-            SoundPlayer simpleSound = new SoundPlayer(Application.StartupPath + "sound_file\\mixkit-interface-hint-notification-911.wav");
-            simpleSound.Play();
         }
 
         private void btnReloadCf_Click(object sender, EventArgs e)
@@ -177,14 +211,5 @@ namespace RoutineAlarm
             //alarmingConfiguration.SaveToCurrentConfig();
         }
 
-        private void notifyIcon1_MouseClick(object sender, EventArgs e)
-        {
-            if (e.GetType() == typeof(Icon))
-            {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-            }
-
-        }
     }
 }

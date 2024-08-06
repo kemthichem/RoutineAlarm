@@ -39,6 +39,7 @@
             listView1 = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
+            columnHeader4 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             ctxMenuForNotifyIcon.SuspendLayout();
             SuspendLayout();
@@ -95,10 +96,10 @@
             // 
             listView1.BackColor = SystemColors.InactiveBorder;
             listView1.BorderStyle = BorderStyle.None;
-            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-            listView1.Location = new Point(48, 12);
+            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4 });
+            listView1.Location = new Point(29, 12);
             listView1.Name = "listView1";
-            listView1.Size = new Size(472, 227);
+            listView1.Size = new Size(543, 227);
             listView1.TabIndex = 9;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -115,11 +116,16 @@
             columnHeader2.TextAlign = HorizontalAlignment.Center;
             columnHeader2.Width = 100;
             // 
+            // columnHeader4
+            // 
+            columnHeader4.Text = "";
+            columnHeader4.Width = 120;
+            // 
             // columnHeader3
             // 
-            columnHeader3.Text = "";
+            columnHeader3.Text = "Status";
             columnHeader3.TextAlign = HorizontalAlignment.Center;
-            columnHeader3.Width = 120;
+            columnHeader3.Width = 70;
             // 
             // RoutineAlarm
             // 
@@ -153,5 +159,6 @@
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
+        private ColumnHeader columnHeader4;
     }
 }
