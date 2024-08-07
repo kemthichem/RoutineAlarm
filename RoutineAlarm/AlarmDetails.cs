@@ -20,7 +20,7 @@ namespace RoutineAlarm
         public AlarmDetails(Form mainForm)
         {
             InitializeComponent();
-            simpleSound = new SoundPlayer(Application.StartupPath + "sound_file\\mixkit-interface-hint-notification-911.wav");
+            simpleSound = new SoundPlayer(Application.StartupPath + "..\\..\\..\\..\\config\\sound_file\\alarm_sound.wav");
 
             routineAlarmFrm = mainForm as RoutineAlarm;
         }

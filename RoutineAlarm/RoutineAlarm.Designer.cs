@@ -39,8 +39,8 @@
             listView1 = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
-            columnHeader4 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
+            columnHeader4 = new ColumnHeader();
             ctxMenuForNotifyIcon.SuspendLayout();
             SuspendLayout();
             // 
@@ -108,18 +108,12 @@
             // 
             columnHeader1.Tag = "";
             columnHeader1.Text = "Task";
-            columnHeader1.Width = 250;
+            columnHeader1.Width = 200;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Remind time";
-            columnHeader2.TextAlign = HorizontalAlignment.Center;
-            columnHeader2.Width = 100;
-            // 
-            // columnHeader4
-            // 
-            columnHeader4.Text = "";
-            columnHeader4.Width = 120;
+            columnHeader2.Width = 150;
             // 
             // columnHeader3
             // 
@@ -127,11 +121,16 @@
             columnHeader3.TextAlign = HorizontalAlignment.Center;
             columnHeader3.Width = 70;
             // 
+            // columnHeader4
+            // 
+            columnHeader4.Text = "";
+            columnHeader4.Width = 120;
+            // 
             // RoutineAlarm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(584, 311);
+            ClientSize = new Size(594, 311);
             Controls.Add(listView1);
             Controls.Add(btnSaveCf);
             Controls.Add(btnReloadCf);

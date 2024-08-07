@@ -14,19 +14,19 @@ namespace RoutineAlarm
         CancellationTokenSource source = new CancellationTokenSource();
         CancellationToken token;
         int currentActiveAlarmTaskIdx = -1;
+        private ListViewExtender extender;
 
         public RoutineAlarm()
         {
             InitializeComponent();
 
-            alarmingConfiguration = new AlarmingConfiguration(Application.StartupPath + "\\alarm_tasks.txt");
+            alarmingConfiguration = new AlarmingConfiguration();
             alarmTasks = alarmingConfiguration.LoadCurrentConfig();
 
-
-            
             token = source.Token;
 
             myThread = new Thread(this.checkAlarmTime);
+            extender = new ListViewExtender(listView1);
 
         }
 
@@ -37,7 +37,7 @@ namespace RoutineAlarm
             {
                 updateAnAlarmTaskTime(currentActiveAlarmTaskIdx);
 
-                listView1.Items[currentActiveAlarmTaskIdx].SubItems[2].Text = alarmTasks[currentActiveAlarmTaskIdx].alarmStatus.ToString();
+                
 
             }
         }
@@ -64,9 +64,11 @@ namespace RoutineAlarm
         private void loadAlarmListView()
         {
             listView1.Items.Clear();
+            listView1.Refresh();
+            //extender.ListView.Clear();
 
             listView1.FullRowSelect = true;
-            ListViewExtender extender = new ListViewExtender(listView1);
+            
             // extend 2nd column
             ListViewButtonColumn lBtnSnooze = new ListViewButtonColumn(3);
             lBtnSnooze.Click += OnListBtnSnoozeClick;
@@ -78,7 +80,7 @@ namespace RoutineAlarm
             foreach (AlarmTask alarmTask in alarmTasks)
             {
                 ListViewItem item = listView1.Items.Add(alarmTask.description);
-                item.SubItems.Add(alarmTask.alarmTime.ToShortTimeString());
+                item.SubItems.Add(alarmTask.GetAlarmTimeStr());
                 item.SubItems.Add(alarmTask.alarmStatus.ToString());
                 item.SubItems.Add("Snooze for 3h");
             }
@@ -86,9 +88,33 @@ namespace RoutineAlarm
 
         private void checkAlarmTime(object token)
         {
+            DateTime oldDate = DateTime.Now;
             while (!((CancellationToken)token).IsCancellationRequested)
             {
+                bool isNewDate = DateTime.Now.DayOfWeek != oldDate.DayOfWeek;
+
+
+                //set isNewday means 1 mins passed
+                //var t = DateTime.Now.Subtract(oldDate).Seconds;
+                //isNewDate = DateTime.Now.Subtract(oldDate).TotalSeconds > 60;
+
+
+                if (isNewDate) // new day
+                {
+                    Program.globalForm.Invoke((MethodInvoker)delegate ()
+                    {
+
+                        foreach (AlarmTask alarmTask in alarmTasks) {
+                            if (alarmTask.alarmStatus == AlarmStatus.Played) {
+                                alarmTask.updateNewDate();                            
+                            }
+                        }
+
+                        loadAlarmListView();
+                    });
+                }
                 Thread.Sleep(5000);
+
                 int i = 0;
                 foreach (AlarmTask alarmTask in alarmTasks)
                 {
@@ -97,17 +123,18 @@ namespace RoutineAlarm
                     {
                         DateTime dt = alarmTask.alarmTime;
 
-                        if (DateTime.Now.TimeOfDay > dt.TimeOfDay)
+                        if (DateTime.Now > dt)
                         {
                             currentActiveAlarmTaskIdx = i;
                             AlarmDetails alarmDetails = new AlarmDetails(Program.globalForm);
-                            alarmDetails.Text = alarmTask.description;
+                            alarmDetails.Text = alarmTask.description + " - " + alarmTask.GetAlarmTimeStr();
                             Program.globalForm.Invoke((MethodInvoker)delegate ()
                             {
                                 //alarmDetails.Show(Program.globalForm);
+                                alarmTask.alarmStatus = AlarmStatus.Playing;
                                 alarmDetails.ShowDialog();
                             });
-                            alarmTask.alarmStatus = AlarmStatus.Playing;
+                            
 
                             //reset
                             currentActiveAlarmTaskIdx = -1;
@@ -116,6 +143,8 @@ namespace RoutineAlarm
                     }
                     ++i;
                 }
+
+                oldDate = DateTime.Now;
 
             }
         }
@@ -134,7 +163,14 @@ namespace RoutineAlarm
         private void updateAnAlarmTaskTime(int index)
         {
             alarmTasks[index].alarmTime = alarmTasks[index].alarmTime.AddHours(3);
-            listView1.Items[index].SubItems[1].Text = alarmTasks[index].alarmTime.ToShortTimeString();
+            //if(alarmTasks[index].alarmTime > DateTime.Now)
+            {
+                alarmTasks[index].alarmStatus = AlarmStatus.NotPlayed;
+            }
+
+            //update GUI
+            listView1.Items[index].SubItems[1].Text = alarmTasks[index].GetAlarmTimeStr();
+            listView1.Items[index].SubItems[2].Text = alarmTasks[index].alarmStatus.ToString();
         }
 
         private void Form1_MinimumSizeChanged(object sender, EventArgs e)
@@ -202,13 +238,17 @@ namespace RoutineAlarm
 
         private void btnReloadCf_Click(object sender, EventArgs e)
         {
+            alarmTasks = alarmingConfiguration.LoadCurrentConfig();
+
             loadAlarmListView();
         }
 
         private void btnSaveCf_Click(object sender, EventArgs e)
         {
 
-            //alarmingConfiguration.SaveToCurrentConfig();
+            alarmingConfiguration.SaveToCurrentConfig(this.alarmTasks);
+
+            MessageBox.Show(this, "Current alarm tasks saved to " + alarmingConfiguration.getPath(), "Save alarm task", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
     }
