@@ -41,6 +41,7 @@
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
+            linkLabel1 = new LinkLabel();
             ctxMenuForNotifyIcon.SuspendLayout();
             SuspendLayout();
             // 
@@ -99,10 +100,11 @@
             listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4 });
             listView1.Location = new Point(29, 12);
             listView1.Name = "listView1";
-            listView1.Size = new Size(543, 227);
+            listView1.Size = new Size(547, 227);
             listView1.TabIndex = 9;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
+            listView1.ColumnWidthChanging += listView1_ColumnWidthChanging;
             // 
             // columnHeader1
             // 
@@ -113,7 +115,7 @@
             // columnHeader2
             // 
             columnHeader2.Text = "Remind time";
-            columnHeader2.Width = 150;
+            columnHeader2.Width = 145;
             // 
             // columnHeader3
             // 
@@ -126,15 +128,28 @@
             columnHeader4.Text = "";
             columnHeader4.Width = 120;
             // 
+            // linkLabel1
+            // 
+            linkLabel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            linkLabel1.Location = new Point(60, 304);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(456, 15);
+            linkLabel1.TabIndex = 10;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "Configuaration path";
+            linkLabel1.TextAlign = ContentAlignment.MiddleCenter;
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            // 
             // RoutineAlarm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(594, 311);
+            ClientSize = new Size(604, 341);
+            Controls.Add(linkLabel1);
             Controls.Add(listView1);
             Controls.Add(btnSaveCf);
             Controls.Add(btnReloadCf);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "RoutineAlarm";
@@ -159,5 +174,6 @@
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
         private ColumnHeader columnHeader4;
+        private LinkLabel linkLabel1;
     }
 }

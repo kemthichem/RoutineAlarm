@@ -55,6 +55,11 @@ namespace RoutineAlarm
             return false;
         }
 
+        internal string GetConfigurationPath()
+        {
+            return Path.GetDirectoryName(Path.GetFullPath(this.path));
+        }
+
         internal string getPath()
         {
             return Path.GetFullPath(this.path);

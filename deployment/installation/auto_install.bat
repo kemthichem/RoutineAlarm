@@ -1,5 +1,7 @@
 @echo OFF
 
+taskkill /f /im RoutineAlarm.exe
+
 rem download MS .net runtime and install (require wiget)
 rem under developing
 

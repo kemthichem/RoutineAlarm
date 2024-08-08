@@ -1,6 +1,7 @@
 namespace RoutineAlarm
 {
     using System;
+    using System.Diagnostics;
     using System.Drawing;
     using System.Media;
     using System.Windows.Forms;
@@ -23,10 +24,14 @@ namespace RoutineAlarm
             alarmingConfiguration = new AlarmingConfiguration();
             alarmTasks = alarmingConfiguration.LoadCurrentConfig();
 
+
+
             token = source.Token;
 
             myThread = new Thread(this.checkAlarmTime);
             extender = new ListViewExtender(listView1);
+
+            linkLabel1.Text = alarmingConfiguration.GetConfigurationPath();
 
         }
 
@@ -37,7 +42,7 @@ namespace RoutineAlarm
             {
                 updateAnAlarmTaskTime(currentActiveAlarmTaskIdx);
 
-                
+
 
             }
         }
@@ -47,7 +52,7 @@ namespace RoutineAlarm
             if (currentActiveAlarmTaskIdx != -1)
             {
                 alarmTasks[currentActiveAlarmTaskIdx].alarmStatus = AlarmStatus.Played;
-                listView1.Items[currentActiveAlarmTaskIdx].SubItems[2].Text = alarmTasks[currentActiveAlarmTaskIdx].alarmStatus.ToString(); 
+                listView1.Items[currentActiveAlarmTaskIdx].SubItems[2].Text = alarmTasks[currentActiveAlarmTaskIdx].alarmStatus.ToString();
             }
         }
 
@@ -57,7 +62,7 @@ namespace RoutineAlarm
 
             loadAlarmListView();
 
-            
+
             myThread.Start(token);
         }
 
@@ -68,7 +73,7 @@ namespace RoutineAlarm
             //extender.ListView.Clear();
 
             listView1.FullRowSelect = true;
-            
+
             // extend 2nd column
             ListViewButtonColumn lBtnSnooze = new ListViewButtonColumn(3);
             lBtnSnooze.Click += OnListBtnSnoozeClick;
@@ -84,6 +89,13 @@ namespace RoutineAlarm
                 item.SubItems.Add(alarmTask.alarmStatus.ToString());
                 item.SubItems.Add("Snooze for 3h");
             }
+        }
+
+        void listView1_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            Console.Write("Column Resizing");
+            e.NewWidth = this.listView1.Columns[e.ColumnIndex].Width;
+            e.Cancel = true;
         }
 
         private void checkAlarmTime(object token)
@@ -104,9 +116,11 @@ namespace RoutineAlarm
                     Program.globalForm.Invoke((MethodInvoker)delegate ()
                     {
 
-                        foreach (AlarmTask alarmTask in alarmTasks) {
-                            if (alarmTask.alarmStatus == AlarmStatus.Played) {
-                                alarmTask.updateNewDate();                            
+                        foreach (AlarmTask alarmTask in alarmTasks)
+                        {
+                            if (alarmTask.alarmStatus == AlarmStatus.Played)
+                            {
+                                alarmTask.updateNewDate();
                             }
                         }
 
@@ -118,7 +132,7 @@ namespace RoutineAlarm
                 int i = 0;
                 foreach (AlarmTask alarmTask in alarmTasks)
                 {
-                    
+
                     if (alarmTask.alarmStatus == AlarmStatus.NotPlayed)
                     {
                         DateTime dt = alarmTask.alarmTime;
@@ -134,7 +148,7 @@ namespace RoutineAlarm
                                 alarmTask.alarmStatus = AlarmStatus.Playing;
                                 alarmDetails.ShowDialog();
                             });
-                            
+
 
                             //reset
                             currentActiveAlarmTaskIdx = -1;
@@ -224,7 +238,7 @@ namespace RoutineAlarm
             this.Dispose();
             ////Application.Exit();
             ///
-            
+
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -251,5 +265,10 @@ namespace RoutineAlarm
             MessageBox.Show(this, "Current alarm tasks saved to " + alarmingConfiguration.getPath(), "Save alarm task", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //% SystemRoot %\explorer.exe "folder path"                
+            Process.Start("explorer.exe", alarmingConfiguration.GetConfigurationPath());
+        }
     }
 }
