@@ -24,6 +24,7 @@ namespace RoutineAlarm
             { 
                 int offset = CalculateOffset(now.DayOfWeek, alarmDow);
                 nextDate = now.AddDays(offset);
+                this.alarmStatus = AlarmStatus.NotPlayed;
             }
 
             this.alarmTime = new DateTime(nextDate.Year, nextDate.Month, nextDate.Day, hour, min, 0);
