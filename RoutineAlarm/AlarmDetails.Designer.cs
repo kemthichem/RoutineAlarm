@@ -66,7 +66,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(384, 211);
+            AutoSize = true;
+            ClientSize = new Size(384, 231);
             ControlBox = false;
             Controls.Add(btnSnooze);
             Controls.Add(btnOK);

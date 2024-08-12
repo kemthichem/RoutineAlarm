@@ -144,6 +144,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             ClientSize = new Size(604, 341);
             Controls.Add(linkLabel1);
             Controls.Add(listView1);
