@@ -1,5 +1,4 @@
 .vs/
 bin/
 obj/
-/deployment/installation/x64
-/deployment/installation/x86
+/deployment/
