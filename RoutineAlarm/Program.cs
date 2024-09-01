@@ -1,6 +1,6 @@
 namespace RoutineAlarm
 {
-
+    using Serilog;
     internal static class Program
     {
 
@@ -11,8 +11,15 @@ namespace RoutineAlarm
         [STAThread]
         static void Main()
         {
-            
 
+            // Set up Serilog
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("logfile.txt", rollingInterval: RollingInterval.Month)
+                .CreateLogger();
+
+            Log.Information("Application starting up");
 
             bool result;
             var mutex = new System.Threading.Mutex(true, "UniqueAppId", out result);
@@ -30,6 +37,9 @@ namespace RoutineAlarm
             Application.Run(globalForm);
 
             GC.KeepAlive(mutex);
+
+            // Ensure to flush and close log
+            Log.CloseAndFlush();
 
         }
     }

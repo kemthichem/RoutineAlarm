@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace RoutineAlarm
+﻿namespace RoutineAlarm
 {
+
+    using Serilog;
     class AlarmTask
     {
         public AlarmTask(string des, string alarmTimeStr, string alarmDate, bool isPlayed) {
@@ -55,10 +50,18 @@ namespace RoutineAlarm
 
         internal void updateNewDate()
         {
+            Log.Information($"updateNewDate - alarmTime {alarmTime}");
             int offset = CalculateOffset(this.alarmTime.DayOfWeek, this.alarmTime.DayOfWeek);
             this.alarmTime = this.alarmTime.AddDays(offset);
 
             this.alarmStatus = AlarmStatus.NotPlayed;
+
+            Log.Information($"updateNewDate Done - alarmTime {alarmTime}");
+        }
+
+        public override string ToString()
+        {
+            return $"{description} - {alarmTime} - {alarmStatus}";
         }
     }
 

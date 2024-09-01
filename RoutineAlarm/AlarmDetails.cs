@@ -25,8 +25,6 @@ namespace RoutineAlarm
             routineAlarmFrm = mainForm as RoutineAlarm;
         }
 
-        
-
 
         private void playSimpleSound()
         {

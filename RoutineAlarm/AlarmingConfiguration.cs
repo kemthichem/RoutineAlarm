@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using Microsoft.VisualBasic.Logging;
 
 namespace RoutineAlarm
 {
+    using Serilog; 
     internal class AlarmingConfiguration
     {
-
-
         private string path = Application.StartupPath + "..\\..\\..\\..\\config\\alarm_tasks.txt";
         public AlarmingConfiguration() { }
 
         public List<AlarmTask> LoadCurrentConfig()
         {
+            
+
             List<AlarmTask> alarmTaskList = new List<AlarmTask>();
 
             List<string> data = File.ReadAllLines(path).ToList();
@@ -34,6 +30,15 @@ namespace RoutineAlarm
 
             //alarmTaskList.Add(new AlarmTask("Drink water", "17:30", false));
             //alarmTaskList.Add(new AlarmTask("Do exercise", "17:32", false));
+
+            Log.Information($"LoadCurrentConfig - Done - size: {alarmTaskList.Count}");
+            var index = 0;
+            foreach (AlarmTask alarmTask in alarmTaskList)
+            {
+                Log.Information($"[{index}] {alarmTask.ToString()}");
+                index++;
+            }
+
 
             return alarmTaskList;
 

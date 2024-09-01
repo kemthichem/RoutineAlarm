@@ -2,8 +2,7 @@ namespace RoutineAlarm
 {
     using System;
     using System.Diagnostics;
-    using System.Drawing;
-    using System.Media;
+    using Serilog;
     using System.Windows.Forms;
 
     public partial class RoutineAlarm : Form
@@ -19,6 +18,8 @@ namespace RoutineAlarm
 
         public RoutineAlarm()
         {
+
+            Log.Information("RoutineAlarm initialized.");
             InitializeComponent();
 
             alarmingConfiguration = new AlarmingConfiguration();
@@ -38,11 +39,11 @@ namespace RoutineAlarm
 
         public void SnoozeAnAlarmTask()
         {
+            Log.Information($"SnoozeAnAlarmTask - currentActiveAlarmTaskIdx: {currentActiveAlarmTaskIdx}");
+
             if (currentActiveAlarmTaskIdx != -1)
             {
                 updateAnAlarmTaskTime(currentActiveAlarmTaskIdx);
-
-
 
             }
         }
@@ -100,22 +101,25 @@ namespace RoutineAlarm
 
         private void checkAlarmTime(object token)
         {
+            Log.Debug("checkAlarmTime");
             DateTime oldDate = DateTime.Now;
             while (!((CancellationToken)token).IsCancellationRequested)
             {
-                bool isNewDate = DateTime.Now.DayOfWeek != oldDate.DayOfWeek;
+                var newDate = DateTime.Now;
+                Log.Debug($"oldDate: {oldDate} - newDate {newDate}");
+                bool isNewDate = newDate.DayOfWeek != oldDate.DayOfWeek;
 
 
                 //set isNewday means 1 mins passed
-                //var t = DateTime.Now.Subtract(oldDate).Seconds;
-                //isNewDate = DateTime.Now.Subtract(oldDate).TotalSeconds > 60;
+                //var t = newDate.Subtract(oldDate).Seconds;
+                //isNewDate = newDate.Subtract(oldDate).TotalSeconds > 60;
 
+                Log.Debug($"checkAlarmTime - isNewDate {isNewDate}");
 
                 if (isNewDate) // new day
                 {
                     Program.globalForm.Invoke((MethodInvoker)delegate ()
                     {
-
                         foreach (AlarmTask alarmTask in alarmTasks)
                         {
                             if (alarmTask.alarmStatus == AlarmStatus.Played)
@@ -127,12 +131,13 @@ namespace RoutineAlarm
                         loadAlarmListView();
                     });
                 }
+
+                oldDate = DateTime.Now;
                 Thread.Sleep(5000);
 
                 int i = 0;
                 foreach (AlarmTask alarmTask in alarmTasks)
                 {
-
                     if (alarmTask.alarmStatus == AlarmStatus.NotPlayed)
                     {
                         DateTime dt = alarmTask.alarmTime;
@@ -157,9 +162,6 @@ namespace RoutineAlarm
                     }
                     ++i;
                 }
-
-                oldDate = DateTime.Now;
-
             }
         }
 
@@ -223,7 +225,6 @@ namespace RoutineAlarm
 
         private void snoozeAllFor3HoursToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             for (int i = 0; i < alarmTasks.Count; i++)
             {
                 updateAnAlarmTaskTime(i);
